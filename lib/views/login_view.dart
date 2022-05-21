@@ -1,9 +1,8 @@
 // ignore_for_file: file_names
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:todos_app/firebase_options.dart';
+import 'package:todos_app/views/register_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({Key? key}) : super(key: key);
@@ -33,69 +32,76 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Login')),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: FutureBuilder(
-            future: Firebase.initializeApp(
-              options: DefaultFirebaseOptions.currentPlatform,
+      appBar: AppBar(title: const Text('Login')),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 30.0,
             ),
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.done:
-                  return Column(
-                    children: [
-                      TextField(
-                        controller: _email,
-                        decoration: const InputDecoration(
-                          labelText: 'Email',
-                        ),
-                      ),
-                      TextField(
-                        controller: _password,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                          labelText: 'Password',
-                        ),
-                      ),
-                      ElevatedButton(
-                        onPressed: () async {
-                          final email = _email.text;
-                          final password = _password.text;
-                          try {
-                            final userCredential = await FirebaseAuth.instance
-                                .signInWithEmailAndPassword(
-                                    email: email, password: password);
+            TextField(
+              controller: _email,
+              decoration: const InputDecoration(
+                labelText: 'Email',
+              ),
+            ),
+            const SizedBox(
+              height: 12.0,
+            ),
+            TextField(
+              controller: _password,
+              obscureText: true,
+              decoration: const InputDecoration(
+                labelText: 'Password',
+              ),
+            ),
+            const SizedBox(
+              height: 20.0,
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final email = _email.text;
+                final password = _password.text;
+                try {
+                  final userCredential = await FirebaseAuth.instance
+                      .signInWithEmailAndPassword(
+                          email: email, password: password);
 
-                            print(userCredential);
-                          } on FirebaseAuthException catch (e) {
-                            if (e.code == 'user-not-found') {
-                              print('user-not-found');
-                            } else if (e.code == 'wrong-password') {
-                              print('enter correct email or password');
-                            } else if (e.code == 'unknown') {
-                              print('please fill all the fields');
-                            }
-                          }
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Colors.lightBlueAccent),
-                        ),
-                        child: const Text("Login",
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white)),
-                      ),
-                    ],
-                  );
-
-                default:
-                  return const Text("Loading...");
-              }
-            },
-          ),
-        ));
+                  print(userCredential);
+                } on FirebaseAuthException catch (e) {
+                  if (e.code == 'user-not-found') {
+                    print('user-not-found');
+                  } else if (e.code == 'wrong-password') {
+                    print('enter correct email or password');
+                  } else if (e.code == 'unknown') {
+                    print('please fill all the fields');
+                  }
+                }
+              },
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.lightBlueAccent),
+              ),
+              child: const Text("Login",
+                  style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white)),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/register/', (route) => false);
+              },
+              child: const Text('Create an account',
+                  style: TextStyle(
+                    fontSize: 16,
+                  )),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
