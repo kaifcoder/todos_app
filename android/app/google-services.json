@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "726943186353",
+    "project_id": "todos-app-drk",
+    "storage_bucket": "todos-app-drk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:726943186353:android:9772461d0fe40a1c21d190",
+        "android_client_info": {
+          "package_name": "com.example.todos_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "726943186353-1699gokqvdi9hh3nd95g9c5nbtu2vtun.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRJdWFsFumT0-p8S6zW8-zBATgWrc7HC0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "726943186353-1699gokqvdi9hh3nd95g9c5nbtu2vtun.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
