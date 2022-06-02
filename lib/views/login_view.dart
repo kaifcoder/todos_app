@@ -78,11 +78,13 @@ class _LoginViewState extends State<LoginView> {
                   );
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'user-not-found') {
-                    devtools.log('user-not-found');
+                    await showErrorDialog(context, 'user-not-found');
                   } else if (e.code == 'wrong-password') {
-                    devtools.log('enter correct email or password');
+                    await showErrorDialog(
+                        context, 'enter correct email or password');
                   } else if (e.code == 'unknown') {
-                    devtools.log('please fill all the fields');
+                    await showErrorDialog(
+                        context, 'please fill all the fields');
                   }
                 }
               },
@@ -113,4 +115,27 @@ class _LoginViewState extends State<LoginView> {
       ),
     );
   }
+}
+
+Future<void> showErrorDialog(
+  BuildContext context,
+  String text,
+) {
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('An error occured'),
+        content: Text(text),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'),
+          )
+        ],
+      );
+    },
+  );
 }

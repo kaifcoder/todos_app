@@ -72,13 +72,15 @@ class RegisterViewState extends State<RegisterView> {
                   devtools.log(userCredential.toString());
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'unknown') {
-                    devtools.log('Input all the fields');
+                    await showErrorDialog(context, 'Input all the fields');
                   } else if (e.code == 'email-already-in-use') {
-                    devtools.log('user is already registered. please log in');
+                    await showErrorDialog(
+                        context, 'user is already registered. please log in');
                   } else if (e.code == 'weak-password') {
-                    devtools.log('please enter a strong password');
+                    await showErrorDialog(
+                        context, 'please enter a strong password');
                   } else if (e.code == 'invalid-email') {
-                    devtools.log('Invalid Email');
+                    await showErrorDialog(context, 'Invalid Email');
                   }
                 }
               },
@@ -107,4 +109,27 @@ class RegisterViewState extends State<RegisterView> {
       ),
     );
   }
+}
+
+Future<void> showErrorDialog(
+  BuildContext context,
+  String text,
+) {
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('An error occured'),
+        content: Text(text),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'),
+          )
+        ],
+      );
+    },
+  );
 }
