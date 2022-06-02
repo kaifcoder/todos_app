@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:todos_app/constants/routes.dart';
 import 'package:todos_app/firebase_options.dart';
 import 'package:todos_app/views/Login_View.dart';
 import 'package:todos_app/views/register_view.dart';
@@ -24,10 +25,10 @@ class MyApp extends StatelessWidget {
       ),
       home: const HomePage(),
       routes: {
-        '/login/': (context) => const LoginView(),
-        '/register/': (context) => const RegisterView(),
-        '/verifyemail/': (context) => const VerifyEmailView(),
-        '/notes/': (context) => const NotesView(),
+        loginRoute: (context) => const LoginView(),
+        registerRoute: (context) => const RegisterView(),
+        verifyemailRoute: (context) => const VerifyEmailView(),
+        notesRoute: (context) => const NotesView(),
       },
     );
   }
@@ -86,8 +87,10 @@ class _NotesViewState extends State<NotesView> {
                   final shouldlogout = await showLogOutDialog(context);
                   if (shouldlogout) {
                     await FirebaseAuth.instance.signOut();
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/login/', (_) => false);
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      loginRoute,
+                      (_) => false,
+                    );
                   }
                   break;
               }
@@ -95,10 +98,12 @@ class _NotesViewState extends State<NotesView> {
             itemBuilder: (context) {
               return const [
                 PopupMenuItem<MenuAction>(
-                    value: MenuAction.logout, child: Text("Sign Out"))
+                  value: MenuAction.logout,
+                  child: Text("Sign Out"),
+                )
               ];
             },
-          )
+          ),
         ],
       ),
       body: const Text("Hello world"),
