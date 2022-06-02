@@ -5,7 +5,6 @@ import 'package:todos_app/firebase_options.dart';
 import 'package:todos_app/views/Login_View.dart';
 import 'package:todos_app/views/register_view.dart';
 import 'package:todos_app/views/verifyemail_view.dart';
-import 'dart:developer' as devtools show log;
 
 void main() {
   runApp(const MyApp());
@@ -28,6 +27,7 @@ class MyApp extends StatelessWidget {
         '/login/': (context) => const LoginView(),
         '/register/': (context) => const RegisterView(),
         '/verifyemail/': (context) => const VerifyEmailView(),
+        '/notes/': (context) => const NotesView(),
       },
     );
   }
