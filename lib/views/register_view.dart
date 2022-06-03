@@ -4,6 +4,8 @@ import 'dart:developer' as devtools show log;
 
 import 'package:todos_app/constants/routes.dart';
 
+import '../utilities/show_error_log.dart';
+
 class RegisterView extends StatefulWidget {
   const RegisterView({Key? key}) : super(key: key);
 
@@ -109,27 +111,4 @@ class RegisterViewState extends State<RegisterView> {
       ),
     );
   }
-}
-
-Future<void> showErrorDialog(
-  BuildContext context,
-  String text,
-) {
-  return showDialog(
-    context: context,
-    builder: (context) {
-      return AlertDialog(
-        title: const Text('An error occured'),
-        content: Text(text),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('OK'),
-          )
-        ],
-      );
-    },
-  );
 }
