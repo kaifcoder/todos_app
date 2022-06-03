@@ -66,12 +66,13 @@ class RegisterViewState extends State<RegisterView> {
                 final email = _email.text;
                 final password = _password.text;
                 try {
-                  final userCredential = await FirebaseAuth.instance
-                      .createUserWithEmailAndPassword(
+                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
                     email: email,
                     password: password,
                   );
-                  devtools.log(userCredential.toString());
+                  final user = FirebaseAuth.instance.currentUser;
+                  await user?.sendEmailVerification();
+                  Navigator.of(context).pushNamed(verifyemailRoute);
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'unknown') {
                     await showErrorDialog(context, 'Input all the fields');
