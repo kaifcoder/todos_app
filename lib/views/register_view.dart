@@ -1,8 +1,7 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'dart:developer' as devtools show log;
-
 import 'package:todos_app/constants/routes.dart';
+import 'package:todos_app/services/auth/auth_exceptions.dart';
+import 'package:todos_app/services/auth/auth_service.dart';
 
 import '../utilities/show_error_log.dart';
 
@@ -66,25 +65,24 @@ class RegisterViewState extends State<RegisterView> {
                 final email = _email.text;
                 final password = _password.text;
                 try {
-                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                  await AuthService.firebase().createUser(
                     email: email,
                     password: password,
                   );
-                  final user = FirebaseAuth.instance.currentUser;
-                  await user?.sendEmailVerification();
+                  AuthService.firebase().sendEmailVerification();
                   Navigator.of(context).pushNamed(verifyemailRoute);
-                } on FirebaseAuthException catch (e) {
-                  if (e.code == 'unknown') {
-                    await showErrorDialog(context, 'Input all the fields');
-                  } else if (e.code == 'email-already-in-use') {
-                    await showErrorDialog(
-                        context, 'user is already registered. please log in');
-                  } else if (e.code == 'weak-password') {
-                    await showErrorDialog(
-                        context, 'please enter a strong password');
-                  } else if (e.code == 'invalid-email') {
-                    await showErrorDialog(context, 'Invalid Email');
-                  }
+                } on WeakPasswordAuthException {
+                  await showErrorDialog(
+                      context, 'please enter a strong password');
+                } on EmailAlreadyInUseAuthException {
+                  await showErrorDialog(
+                      context, 'user is already registered. please log in');
+                } on InvalidEmailAuthException {
+                  await showErrorDialog(context, 'Invalid Email');
+                } on UnknownAuthException {
+                  await showErrorDialog(context, 'Input all the fields');
+                } on GenericAuthException {
+                  await showErrorDialog(context, 'Failed to register');
                 }
               },
               style: ButtonStyle(

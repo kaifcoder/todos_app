@@ -1,12 +1,8 @@
 // ignore_for_file: file_names
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'package:todos_app/views/register_view.dart';
-import 'dart:developer' as devtools show log;
-
 import 'package:todos_app/constants/routes.dart';
-
+import 'package:todos_app/services/auth/auth_exceptions.dart';
+import 'package:todos_app/services/auth/auth_service.dart';
 import '../utilities/show_error_log.dart';
 
 class LoginView extends StatefulWidget {
@@ -69,12 +65,12 @@ class _LoginViewState extends State<LoginView> {
                 final email = _email.text;
                 final password = _password.text;
                 try {
-                  await FirebaseAuth.instance.signInWithEmailAndPassword(
+                  await AuthService.firebase().logIn(
                     email: email,
                     password: password,
                   );
-                  final user = FirebaseAuth.instance.currentUser;
-                  if (user?.emailVerified ?? false) {
+                  final user = AuthService.firebase().currentUser;
+                  if (user?.isEmailVerified ?? false) {
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       notesRoute,
                       (route) => false,
@@ -85,16 +81,26 @@ class _LoginViewState extends State<LoginView> {
                       (route) => false,
                     );
                   }
-                } on FirebaseAuthException catch (e) {
-                  if (e.code == 'user-not-found') {
-                    await showErrorDialog(context, 'user-not-found');
-                  } else if (e.code == 'wrong-password') {
-                    await showErrorDialog(
-                        context, 'enter correct email or password');
-                  } else if (e.code == 'unknown') {
-                    await showErrorDialog(
-                        context, 'please fill all the fields');
-                  }
+                } on UserNotFoundAuthException {
+                  await showErrorDialog(
+                    context,
+                    'user-not-found',
+                  );
+                } on WrongPasswordAuthException {
+                  await showErrorDialog(
+                    context,
+                    'enter correct email or password',
+                  );
+                } on UnknownAuthException {
+                  await showErrorDialog(
+                    context,
+                    'please fill all the fields',
+                  );
+                } on GenericAuthException {
+                  await showErrorDialog(
+                    context,
+                    "Authentication error",
+                  );
                 }
               },
               style: ButtonStyle(
