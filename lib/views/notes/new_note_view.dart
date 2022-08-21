@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todos_app/constants/routes.dart';
 import 'package:todos_app/services/auth/auth_service.dart';
 import 'package:todos_app/services/auth/crud/note_service.dart';
 
@@ -23,7 +24,9 @@ class _NewNoteViewState extends State<NewNoteView> {
 
   void _textControllerListener() async {
     final note = _note;
-    if (note == null) return;
+    if (note == null) {
+      return;
+    }
     final text = _textController.text;
     await _notesService.updateNote(note: note, text: text);
   }
@@ -54,7 +57,7 @@ class _NewNoteViewState extends State<NewNoteView> {
   void _saveNoteIfTextIsNotEmpty() async {
     final note = _note;
     final text = _textController.text;
-    if (text.isNotEmpty && note != null) {
+    if (note != null && text.isNotEmpty) {
       await _notesService.updateNote(
         note: note,
         text: text,
@@ -75,6 +78,14 @@ class _NewNoteViewState extends State<NewNoteView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("New Note"),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil(notesRoute, (route) => false);
+              },
+              icon: const Icon(Icons.done)),
+        ],
       ),
       body: FutureBuilder(
         future: createNewNote(),

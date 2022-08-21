@@ -102,18 +102,15 @@ class NoteService {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     final deletedCount = await db.delete(
-      userTable,
+      noteTable,
       where: 'id = ?',
       whereArgs: [id],
     );
     if (deletedCount == 0) {
       throw CouldNotDeleteNote();
     } else {
-      final countbefore = _notes.length;
       _notes.removeWhere((note) => note.id == id);
-      if (_notes.length != countbefore) {
-        _notesStreamController.add(_notes);
-      }
+      _notesStreamController.add(_notes);
     }
   }
 
@@ -182,8 +179,8 @@ class NoteService {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrow();
     final deletedCount = await db.delete(
-      userTable,
-      where: 'email=?',
+      noteTable,
+      where: 'email = ?',
       whereArgs: [email.toLowerCase()],
     );
     if (deletedCount != 1) {
