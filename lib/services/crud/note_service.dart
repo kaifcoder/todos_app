@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';

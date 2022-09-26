@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todos_app/constants/routes.dart';
 import 'package:todos_app/services/auth/auth_service.dart';
 import 'package:todos_app/enums/menu_actions.dart';
-import 'package:todos_app/services/auth/crud/note_service.dart';
+import 'package:todos_app/services/crud/note_service.dart';
 import 'package:todos_app/utilities/dialogs/logout_dialog.dart';
 import 'package:todos_app/views/notes/notes_list_view.dart';
 
@@ -15,7 +15,7 @@ class NotesView extends StatefulWidget {
 
 class _NotesViewState extends State<NotesView> {
   late final NoteService _notesService;
-  String get userEmail => AuthService.firebase().currentUser!.email!;
+  String get userEmail => AuthService.firebase().currentUser!.email;
 
   @override
   void initState() {
